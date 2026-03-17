@@ -162,7 +162,26 @@
   // 4.3 数学公式
   // 设置 equation 的编号和假段落首行缩进
   // show math.equation.where(block: true): i-figured.show-equation
-  set math.equation(numbering: none)
+  let eq-numbering = none
+  if info.at("equation-numbering", default: true) {
+    eq-numbering = (..nums) => context {
+      let h-num = counter(heading).get()
+      if h-num.len() > 0 and h-num.first() > 0 {
+        numbering("(1.1)", h-num.first(), nums.pos().first())
+      } else {
+        numbering("(1)", nums.pos().first())
+      }
+    }
+  }
+  set math.equation(numbering: eq-numbering)
+
+  show heading.where(level: 1): it => {
+    if info.at("equation-numbering", default: true) {
+      counter(math.equation).update(0)
+    }
+    it
+  }
+
   show math.equation: it => {
     set text(font: 字体.数学)
     h(0.2em)

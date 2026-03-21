@@ -189,6 +189,27 @@
     h(0.1em)
   }
 
+  show ref: it => {
+    let eq = math.equation
+    let el = it.element
+    if el != none and el.func() == eq {
+      if info.at("equation-numbering", default: true) {
+        let eq-loc = el.location()
+        let h-num = counter(heading).at(eq-loc)
+        let num = counter(eq).at(eq-loc)
+        if h-num.len() > 0 and h-num.first() > 0 {
+          link(eq-loc)[式 (#h-num.first().#num.first())]
+        } else {
+          link(eq-loc)[式 (#num.first())]
+        }
+      } else {
+        it
+      }
+    } else {
+      it
+    }
+  }
+
   // 4.4 页脚
   // 设置脚注
   show footnote.entry: set text(font: 字体.宋体, size: 字号.五号)

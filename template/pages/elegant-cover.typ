@@ -2,6 +2,24 @@
 
 #import "../utils/font-style.typ": 字号, 字体
 
+#let cover-image-url-error = "Typst 不能直接从 HTTP/HTTPS 链接读取封面图。请使用 template/tools/compile-with-cover-url.py 编译，或先把图片下载到本地后通过 cover-image: image(\"...\") 传入。"
+
+#let is-url(value) = {
+  type(value) == str and (
+    value.starts-with("http://") or value.starts-with("https://")
+  )
+}
+
+#let render-cover-image(source) = {
+  if type(source) == content {
+    source
+  } else if is-url(source) {
+    panic(cover-image-url-error)
+  } else {
+    image(source)
+  }
+}
+
 #let elegant-cover(
   // documentclass 传入的参数
   twoside: false,
@@ -14,6 +32,7 @@
     author: "Choglost",
     date: datetime.today(),
     cover-image: none,
+    cover-image-url: none,
   ) + info
 
   // 2.  对参数进行处理
@@ -32,8 +51,14 @@
 
   set page(margin: 0pt)
 
-  if info.cover-image != none {
-    image(info.cover-image)
+  let cover-source = if info.cover-image-url != none {
+    info.cover-image-url
+  } else {
+    info.cover-image
+  }
+
+  if cover-source != none {
+    render-cover-image(cover-source)
     v(20pt)
   } else {
 

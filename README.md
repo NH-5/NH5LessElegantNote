@@ -25,7 +25,8 @@
     title: "LessElegantNote：一个Typst笔记模版",
     author: "Your Name",
     date: datetime.today(),
-    // cover-image: "assets/coverimage.jpg", // 可选封面图
+    // cover-image: image("assets/coverimage.jpg"), // 可选本地封面图
+    // cover-image-url: "https://example.com/cover.jpg", // 可选远程封面图
     style-name: "maths", // 可选风格: "maths", "literature", "book"
     equation-numbering: true, // 是否开启公式按章节自动编号，默认为 true
   )
@@ -39,3 +40,12 @@
 ### 3. 项目结构
 - `template/`: 模板核心文件。
   - `conf.typ`: 模板入口，推荐通过此文件调用。
+
+### 4. 使用远程封面图
+Typst 本身不会直接从 HTTP/HTTPS 链接读取图片。使用 `cover-image-url` 时，请通过辅助脚本编译：
+
+```bash
+python3 template/tools/compile-with-cover-url.py note.typ note.pdf
+```
+
+脚本会把远程图片下载到 `.typst-cache/cover-images/`，并在编译时自动传给模板。

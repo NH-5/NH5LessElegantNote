@@ -26,6 +26,7 @@
       author: "choglost",
       date: datetime.today(),
       cover-image:none,
+      cover-image-url: none,
       style-name: "maths",
       equation-numbering: true,
     )
